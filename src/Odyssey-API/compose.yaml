@@ -1,6 +1,0 @@
-﻿services:
-  webhost:
-    image: webhost
-    build:
-      context: .
-      dockerfile: WebHost/Dockerfile

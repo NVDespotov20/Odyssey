@@ -1,0 +1,44 @@
+services:
+    webhost:
+        image: webhost
+        build:
+            context: ./src/Odyssey-API
+            dockerfile: WebHost/Dockerfile
+        ports:
+            - "8080:8080"
+        environment:
+            - PORT=8000
+            - DB_HOST=db
+            - DB_PORT=5432
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=postgres
+        depends_on:
+            - db
+
+    db:
+        image: postgres:16
+        volumes:
+            - ./db:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=postgres
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin4_container
+        restart: always
+        ports:
+            - "8888:80"
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        volumes:
+            - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+    pgadmin-data:
+    data:

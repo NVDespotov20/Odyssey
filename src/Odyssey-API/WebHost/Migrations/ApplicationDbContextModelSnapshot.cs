@@ -22,6 +22,31 @@ namespace WebHost.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("WebHost.Entities.Academy", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("location");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("academys");
+                });
+
             modelBuilder.Entity("WebHost.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Id")
@@ -43,7 +68,45 @@ namespace WebHost.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("refresh_tokens", (string)null);
+                    b.ToTable("refresh_tokens");
+                });
+
+            modelBuilder.Entity("WebHost.Entities.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4d3505db-db4d-480e-a0cd-79da2d89ecb1",
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = "575a7629-2450-4dd7-afae-56abf05870bb",
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = "fe2bbdd8-b375-4b8a-a610-34509f336c09",
+                            Name = "instructor"
+                        },
+                        new
+                        {
+                            Id = "618f20dd-ae11-43cb-a5d1-5f938fc9953b",
+                            Name = "academy"
+                        });
                 });
 
             modelBuilder.Entity("WebHost.Entities.User", b =>
@@ -98,7 +161,40 @@ namespace WebHost.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("users");
+                });
+
+            modelBuilder.Entity("WebHost.Entities.UserRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text")
+                        .HasColumnName("role_id");
+
+                    b.Property<string>("AcademyId")
+                        .HasColumnType("text")
+                        .HasColumnName("academy_id");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("AcademyId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user_roles");
                 });
 
             modelBuilder.Entity("WebHost.Entities.RefreshToken", b =>
@@ -112,9 +208,46 @@ namespace WebHost.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WebHost.Entities.UserRole", b =>
+                {
+                    b.HasOne("WebHost.Entities.Academy", "Academy")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AcademyId");
+
+                    b.HasOne("WebHost.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebHost.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Academy");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebHost.Entities.Academy", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("WebHost.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("WebHost.Entities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,5 @@
 services:
     webhost:
-        image: webhost
         build:
             context: ./src/Odyssey-API
             dockerfile: WebHost/Dockerfile

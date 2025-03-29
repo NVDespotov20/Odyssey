@@ -1,9 +1,51 @@
 import { useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import { useMutation } from "@tanstack/react-query"
+
+import { authAPI } from "@/apis/authAPI"
+
+import { toast } from "sonner"
+
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 export default function SignIn() {
     const navigate = useNavigate()
+
+    const [userData, setUserData] = useState<{ username: string, password: string } | null>(null)
+
+    const loginUserMutation = useMutation({
+        mutationFn: authAPI.signIn,
+        onSuccess: (data) => {
+            localStorage.setItem('accessToken', data.data.accessToken)
+            localStorage.setItem('refreshToken', data.data.refreshToken)
+            window.location.href = "/browse"
+        },
+    })
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate("/browse")
+        }
+    })
+
+    const handleUserCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({
+            ...prev!,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!userData?.username || !userData?.password) {
+            toast.error("Please enter your email and password")
+            return
+        }
+
+        loginUserMutation.mutate(userData)
+    }
 
     return (
         <div className="flex flex-row-reverse min-h-screen min-w-screen">
@@ -12,9 +54,9 @@ export default function SignIn() {
 
                 <div className="flex w-2/3 flex-col gap-10">
                     <h1 className="text-3xl font-bold">Welcome back</h1>
-                    <form className="flex flex-col gap-3">
-                        <Input placeholder="Email" type="email" />
-                        <Input placeholder="Password" type="password" />
+                    <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                        <Input onChange={handleUserCredentials} placeholder="Username" type="username" name="username" />
+                        <Input onChange={handleUserCredentials} placeholder="Password" type="password" name="password" />
 
                         <Button className="py-5 mt-5 rounded-full border-black" type="submit" variant="outline">Sign In</Button>
                     </form>

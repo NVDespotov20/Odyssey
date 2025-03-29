@@ -1,10 +1,53 @@
 import { useNavigate } from "react-router-dom"
+import React, { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+
+import { authAPI } from "@/apis/authAPI"
 
 export default function SignUp() {
     const navigate = useNavigate()
+
+    const [userData, setUserData] = useState<{ email: string, password: string, confirmPassword: string, fname: string, lname: string, uname: string } | null>(null)
+
+    const handleUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({
+            ...prev!,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const createUserMutation = useMutation({
+        mutationFn: authAPI.signUp,
+        onSuccess: () => {
+            navigate('/login')
+        }
+    })
+
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!userData?.password || !userData?.confirmPassword) {
+            toast.error("Please enter a password")
+            return
+        }
+
+        if (userData.password !== userData.confirmPassword) {
+            toast.error("Passwords do not match")
+            return
+        }
+
+        createUserMutation.mutate({
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.fname,
+            lastName: userData.lname,
+            username: userData.uname
+        })
+    }
 
     return (
         <div className="flex min-h-screen min-w-screen">
@@ -13,15 +56,15 @@ export default function SignUp() {
 
                 <div className="flex w-2/3 flex-col gap-10">
                     <h1 className="text-3xl font-bold">First, enter your email</h1>
-                    <form className="flex flex-col gap-3">
+                    <form onSubmit={handleRegister} className="flex flex-col gap-3">
                         <div className="flex gap-3">
-                            <Input placeholder="First Name" />
-                            <Input placeholder="Last Name" />
+                            <Input onChange={handleUserInfo} placeholder="First Name" name="fname" />
+                            <Input onChange={handleUserInfo} placeholder="Last Name" name="lname" />
                         </div>
-                        <Input placeholder="Username" />
-                        <Input placeholder="Email" type="email" />
-                        <Input placeholder="Password" type="password" />
-                        <Input placeholder="Confirm Password" type="password" />
+                        <Input onChange={handleUserInfo} placeholder="Username" name="uname" />
+                        <Input onChange={handleUserInfo} placeholder="Email" type="email" name="email" />
+                        <Input onChange={handleUserInfo} placeholder="Password" type="password" name="password" />
+                        <Input onChange={handleUserInfo} placeholder="Confirm Password" type="password" name="confirmPassword" />
 
                         <Button className="py-5 mt-5 rounded-full border-black" type="submit" variant="outline">Sign Up</Button>
                     </form>

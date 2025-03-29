@@ -65,11 +65,11 @@ func GenerateKeys() {
 	}))
 }
 
-func GetAccessPublicKey() []byte {
+func GetAccessPublicKey() string {
 	return aTokenPublicKey
 }
 
-func GetRefreshPublicKey() []byte {
+func GetRefreshPublicKey() string {
 	return rTokenPublicKey
 }
 
@@ -89,7 +89,7 @@ func ValidateRefreshToken(tokenString string) (db.User, utils.APIError) {
 	return validateToken(tokenString, GetRefreshPublicKey(), true)
 }
 
-func validateToken(tokenString string, publicKey []byte, checkJti bool) (user db.User, apiErr utils.APIError) {
+func validateToken(tokenString string, publicKey string, checkJti bool) (user db.User, apiErr utils.APIError) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -151,7 +151,7 @@ func validateToken(tokenString string, publicKey []byte, checkJti bool) (user db
 	return
 }
 
-func generateToken(userid string, key []byte, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
+func generateToken(userid string, key string, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 

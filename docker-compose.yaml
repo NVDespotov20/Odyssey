@@ -22,6 +22,7 @@ services:
             - "5173:5173"
         volumes:
             - ./client:/client
+            - /client/node_modules
         command: ["bun", "run", "dev"]
 
     db:

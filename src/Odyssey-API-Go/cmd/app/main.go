@@ -14,14 +14,14 @@ func main() {
 	exitSignal := make(chan os.Signal, 1)
 	signal.Notify(exitSignal, os.Interrupt)
 
-	db.ConnectDB()
-	server.Init()
+	go db.ConnectDB()
+	go server.Init()
 	server.BindRoutes()
 	auth.GenerateKeys()
 	jwks.GenerateKeySet()
 
 	<-exitSignal
-	db.DisconnectDB()
-	server.Shutdown()
+	go db.DisconnectDB()
+	go server.Shutdown()
 
 }

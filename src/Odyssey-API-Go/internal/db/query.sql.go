@@ -32,6 +32,41 @@ func (q *Queries) CreateRefreshToken(ctx context.Context, arg CreateRefreshToken
 	return i, err
 }
 
+const createSession = `-- name: CreateSession :one
+
+INSERT INTO sessions(
+    start_time, end_time, instructor_id, student_id
+) VALUES (
+    $1, $2, $3, $4
+)
+RETURNING id, start_time, end_time, instructor_id, student_id
+`
+
+type CreateSessionParams struct {
+	StartTime    pgtype.Timestamptz
+	EndTime      pgtype.Timestamptz
+	InstructorID string
+	StudentID    string
+}
+
+func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
+	row := q.db.QueryRow(ctx, createSession,
+		arg.StartTime,
+		arg.EndTime,
+		arg.InstructorID,
+		arg.StudentID,
+	)
+	var i Session
+	err := row.Scan(
+		&i.ID,
+		&i.StartTime,
+		&i.EndTime,
+		&i.InstructorID,
+		&i.StudentID,
+	)
+	return i, err
+}
+
 const createUsers = `-- name: CreateUsers :one
 INSERT INTO users (
    first_name, last_name, username, about_me, email, password, salt
@@ -90,6 +125,26 @@ func (q *Queries) DeleteRefreshToken(ctx context.Context, id string) (RefreshTok
 	return i, err
 }
 
+const deleteSession = `-- name: DeleteSession :one
+
+DELETE FROM sessions
+WHERE id = $1
+RETURNING id, start_time, end_time, instructor_id, student_id
+`
+
+func (q *Queries) DeleteSession(ctx context.Context, id string) (Session, error) {
+	row := q.db.QueryRow(ctx, deleteSession, id)
+	var i Session
+	err := row.Scan(
+		&i.ID,
+		&i.StartTime,
+		&i.EndTime,
+		&i.InstructorID,
+		&i.StudentID,
+	)
+	return i, err
+}
+
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE id = $1
@@ -124,6 +179,69 @@ func (q *Queries) GetRefreshTokenByUserId(ctx context.Context, userID string) (s
 	var refresh_token string
 	err := row.Scan(&refresh_token)
 	return refresh_token, err
+}
+
+const getSessionsByInstructorId = `-- name: GetSessionsByInstructorId :many
+
+SELECT start_time, end_time FROM sessions
+WHERE instructor_id = $1
+`
+
+type GetSessionsByInstructorIdRow struct {
+	StartTime pgtype.Timestamptz
+	EndTime   pgtype.Timestamptz
+}
+
+func (q *Queries) GetSessionsByInstructorId(ctx context.Context, instructorID string) ([]GetSessionsByInstructorIdRow, error) {
+	rows, err := q.db.Query(ctx, getSessionsByInstructorId, instructorID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSessionsByInstructorIdRow
+	for rows.Next() {
+		var i GetSessionsByInstructorIdRow
+		if err := rows.Scan(&i.StartTime, &i.EndTime); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSessionsByInstructorIdAuth = `-- name: GetSessionsByInstructorIdAuth :many
+
+SELECT start_time, end_time, student_id FROM sessions 
+WHERE instructor_id = $1
+`
+
+type GetSessionsByInstructorIdAuthRow struct {
+	StartTime pgtype.Timestamptz
+	EndTime   pgtype.Timestamptz
+	StudentID string
+}
+
+func (q *Queries) GetSessionsByInstructorIdAuth(ctx context.Context, instructorID string) ([]GetSessionsByInstructorIdAuthRow, error) {
+	rows, err := q.db.Query(ctx, getSessionsByInstructorIdAuth, instructorID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSessionsByInstructorIdAuthRow
+	for rows.Next() {
+		var i GetSessionsByInstructorIdAuthRow
+		if err := rows.Scan(&i.StartTime, &i.EndTime, &i.StudentID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getUserById = `-- name: GetUserById :one

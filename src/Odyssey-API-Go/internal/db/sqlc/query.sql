@@ -60,3 +60,28 @@ RETURNING *;
 
 SELECT refresh_token FROM refresh_tokens
 WHERE user_id = $1;
+
+-- name: CreateSession :one
+
+INSERT INTO sessions(
+    start_time, end_time, instructor_id, student_id
+) VALUES (
+    $1, $2, $3, $4
+)
+RETURNING *;
+
+-- name: GetSessionsByInstructorId :many
+
+SELECT start_time, end_time FROM sessions
+WHERE instructor_id = $1;
+
+-- name: GetSessionsByInstructorIdAuth :many
+
+SELECT start_time, end_time, student_id FROM sessions 
+WHERE instructor_id = $1;
+
+-- name: DeleteSession :one
+
+DELETE FROM sessions
+WHERE id = $1
+RETURNING *;

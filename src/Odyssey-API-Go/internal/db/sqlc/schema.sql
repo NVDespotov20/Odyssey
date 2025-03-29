@@ -16,3 +16,13 @@ CREATE TABLE refresh_tokens (
     user_id TEXT NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE TABLE sessions (
+    id TEXT DEFAULT gen_random_uuid() PRIMARY KEY,
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
+    instructor_id TEXT NOT NULL,
+    student_id TEXT NOT NULL,
+    CONSTRAINT fk_instructor_id FOREIGN KEY(instructor_id) REFERENCES users(id),
+    CONSTRAINT fk_student_id FOREIGN KEY(student_id) REFERENCES users(id)
+);

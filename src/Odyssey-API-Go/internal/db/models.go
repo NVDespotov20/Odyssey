@@ -14,6 +14,14 @@ type RefreshToken struct {
 	UserID       string
 }
 
+type Session struct {
+	ID           string
+	StartTime    pgtype.Timestamptz
+	EndTime      pgtype.Timestamptz
+	InstructorID string
+	StudentID    string
+}
+
 type User struct {
 	ID        string
 	FirstName string

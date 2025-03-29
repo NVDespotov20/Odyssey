@@ -107,14 +107,14 @@ func (service *UserService) Login(loginInfo dto.Login) (accessToken string, refr
 	refreshToken, apiErr = auth.GenerateRefreshToken(user.ID)
 	if apiErr.Message != "" {
 		apiErr.Code = http.StatusInternalServerError
-		apiErr.Message = "Token generation failed"
+		apiErr.Message = "Token generation failed " + apiErr.Message
 		return
 	}
 
 	accessToken, apiErr = auth.GenerateAccessToken(user.ID)
 	if apiErr.Message != "" {
 		apiErr.Code = http.StatusInternalServerError
-		apiErr.Message = "Token generation failed"
+		apiErr.Message = "Token generation failed " + apiErr.Message
 		return
 	}
 

@@ -2,9 +2,12 @@ package auth
 
 import (
 	"context"
-	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"fmt"
+	"log"
 	"net/http"
 	"odysseyapi-go/internal/db"
 	"odysseyapi-go/internal/utils"
@@ -20,24 +23,54 @@ const (
 )
 
 var (
-	rTokenPrivateKey *rsa.PrivateKey
-	aTokenPrivateKey *rsa.PrivateKey
+	rTokenPrivateKey string
+	aTokenPrivateKey string
+	rTokenPublicKey  string
+	aTokenPublicKey  string
 )
 
 func GenerateKeys() {
 	//seed := sha256.Sum224([]byte(os.Getenv("JWT_ACCESS_GEN_SECRET")))
-	aTokenPrivateKey, _ = rsa.GenerateKey(rand.Reader, 2048)
+	aTokenKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		log.Fatalf("Failed to generate RSA key: %v", err)
+	}
+
+	aTokenPrivateKey = string(pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(aTokenKey),
+	}))
+
+	fmt.Println("")
+
+	aTokenPublicKey = string(pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PUBLIC KEY",
+		Bytes: x509.MarshalPKCS1PublicKey(&aTokenKey.PublicKey),
+	}))
 
 	//seed = sha256.Sum256([]byte(os.Getenv("JWT_REFRESH_GEN_SECRET")))
-	rTokenPrivateKey, _ = rsa.GenerateKey(rand.Reader, 2048)
+	rTokenKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		log.Fatalf("Failed to generate RSA key: %v", err)
+	}
+
+	aTokenPrivateKey = string(pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(rTokenKey),
+	}))
+
+	aTokenPrivateKey = string(pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PUBLIC KEY",
+		Bytes: x509.MarshalPKCS1PublicKey(&rTokenKey.PublicKey),
+	}))
 }
 
-func GetAccessPublicKey() crypto.PublicKey {
-	return aTokenPrivateKey.Public()
+func GetAccessPublicKey() []byte {
+	return aTokenPublicKey
 }
 
-func GetRefreshPublicKey() crypto.PublicKey {
-	return rTokenPrivateKey.Public()
+func GetRefreshPublicKey() []byte {
+	return rTokenPublicKey
 }
 
 func GenerateAccessToken(userid string) (string, utils.APIError) {
@@ -56,7 +89,7 @@ func ValidateRefreshToken(tokenString string) (db.User, utils.APIError) {
 	return validateToken(tokenString, GetRefreshPublicKey(), true)
 }
 
-func validateToken(tokenString string, publicKey crypto.PublicKey, checkJti bool) (user db.User, apiErr utils.APIError) {
+func validateToken(tokenString string, publicKey []byte, checkJti bool) (user db.User, apiErr utils.APIError) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -118,7 +151,7 @@ func validateToken(tokenString string, publicKey crypto.PublicKey, checkJti bool
 	return
 }
 
-func generateToken(userid string, key *rsa.PrivateKey, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
+func generateToken(userid string, key []byte, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -156,7 +189,7 @@ func generateToken(userid string, key *rsa.PrivateKey, duration time.Duration, a
 
 	if err != nil {
 		apiErr.Code = http.StatusInternalServerError
-		apiErr.Message = "Token signature failed"
+		apiErr.Message = "Token signature failed " + err.Error()
 		return
 	}
 

@@ -38,46 +38,6 @@ package handlers
 // 		return
 // 	}
 //
-// 	if session.StudentID != user.ID {
-// 		utils.FormatError(w, map[string]any{
-// 			"message": "Missing permissions",
-// 		}, http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	startTime, err := time.Parse("2025-03-29 14:30:00 GMT", session.StartTime)
-// 	if err != nil {
-// 		utils.FormatError(w, map[string]any{
-// 			"message": "Invalid time format",
-// 		}, http.StatusBadRequest)
-// 		return
-// 	}
-// 	var startTimePg pgtype.Timestamptz
-// 	startTimePg.Scan(startTime)
-//
-// 	endTime, err := time.Parse("2025-03-29 14:30:00 GMT", session.EndTime)
-// 	if err != nil {
-// 		utils.FormatError(w, map[string]any{
-// 			"message": "Invalid time format",
-// 		}, http.StatusBadRequest)
-// 		return
-// 	}
-// 	var endTimePg pgtype.Timestamptz
-// 	endTimePg.Scan(endTime)
-//
-// 	_, err = db.GetQueries().CreateSession(ctx, db.CreateSessionParams{
-// 		StartTime:    startTimePg,
-// 		EndTime:      endTimePg,
-// 		InstructorID: session.InstructorID,
-// 		StudentID:    session.StudentID,
-// 	})
-// 	if err != nil {
-// 		utils.FormatError(w, map[string]any{
-// 			"message": "Internal error",
-// 		}, http.StatusInternalServerError)
-// 		return
-// 	}
-//
 // 	marshalledSession, err := json.Marshal(session)
 // 	if err != nil {
 // 		utils.FormatError(w, map[string]any{
@@ -92,6 +52,5 @@ package handlers
 // }
 //
 // func (handler *SessionHandler) GetSessions(w http.ResponseWriter, r *http.Request) {
-//
 //
 // }

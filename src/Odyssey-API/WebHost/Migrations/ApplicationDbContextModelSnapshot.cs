@@ -43,7 +43,7 @@ namespace WebHost.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("refresh_tokens");
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("WebHost.Entities.User", b =>
@@ -98,7 +98,7 @@ namespace WebHost.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("WebHost.Entities.RefreshToken", b =>

@@ -21,6 +21,47 @@ public class ApplicationDbContext : DbContext
             e.GetProperty("Id");
             e.GetProperties().ToList().ForEach(p => p.SetColumnName(ConvertToSnakeCase(p.Name)));
         });
+        
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserRole>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Academy)
+                .WithMany(a => a.UserRoles)
+                .HasForeignKey(ur => ur.AcademyId)
+                .IsRequired(false);
+            
+            modelBuilder.Entity<Role>()
+                .HasData(
+                    new Role { Id = Guid.NewGuid().ToString(), Name = "user" },
+                    new Role { Id = Guid.NewGuid().ToString(), Name = "admin" },
+                    new Role { Id = Guid.NewGuid().ToString(), Name = "instructor" },
+                    new Role { Id = Guid.NewGuid().ToString(), Name = "academy" }
+                );
     }
     private string ConvertToSnakeCase(string input, bool plural = false)
     {

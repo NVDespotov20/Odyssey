@@ -30,7 +30,7 @@ func GenerateKeySet() (err error) {
 		KeyUsage:  "sig",
 		Algorithm: "EdDSA",
 		Crv:       "Ed25519",
-		X:         fmt.Sprintf("%x", auth.GetAccessPublicKey()),
+		X:         fmt.Sprintf("%s", auth.GetAccessPublicKey()),
 	})
 
 	keys = append(keys, JWK{
@@ -39,7 +39,7 @@ func GenerateKeySet() (err error) {
 		KeyUsage:  "sig",
 		Algorithm: "EdDSA",
 		Crv:       "Ed25519",
-		X:         fmt.Sprintf("%x", auth.GetAccessPublicKey()),
+		X:         fmt.Sprintf("%s", auth.GetAccessPublicKey()),
 	})
 
 	keyJson, err = json.Marshal(keys)

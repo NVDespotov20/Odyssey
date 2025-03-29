@@ -9,9 +9,9 @@ import (
 )
 
 type RefreshToken struct {
-	ID           string
-	RefreshToken string
-	UserID       string
+	ID     string
+	Token  string
+	UserID string
 }
 
 type Session struct {
@@ -20,6 +20,7 @@ type Session struct {
 	EndTime      pgtype.Timestamptz
 	InstructorID string
 	StudentID    string
+	Accepted     bool
 }
 
 type User struct {
@@ -31,5 +32,5 @@ type User struct {
 	Email     string
 	Password  []byte
 	Salt      string
-	Deleted   pgtype.Bool
+	Deleted   bool
 }

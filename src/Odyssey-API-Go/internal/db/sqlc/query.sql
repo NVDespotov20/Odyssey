@@ -38,7 +38,7 @@ RETURNING *;
 
 -- name: CreateRefreshToken :one
 INSERT INTO refresh_tokens(
-    refresh_token, user_id
+    token, user_id
 ) VALUES (
     $1, $2
 )
@@ -46,7 +46,7 @@ RETURNING *;
 
 -- name: UpdateRefreshToken :one
 UPDATE refresh_tokens
-    SET refresh_token = $2
+    SET token = $2
 WHERE id = $1
 RETURNING *;
 
@@ -58,7 +58,7 @@ RETURNING *;
 
 -- name: GetRefreshTokenByUserId :one
 
-SELECT refresh_token FROM refresh_tokens
+SELECT token FROM refresh_tokens
 WHERE user_id = $1;
 
 -- name: CreateSession :one

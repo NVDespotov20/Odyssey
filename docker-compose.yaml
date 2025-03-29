@@ -26,7 +26,7 @@ services:
             - API_NAME=oapi-go
             - JWT_ACCESS_GEN_SECRET=brat
             - JWT_REFRESH_GEN_SECRET=marzima
-            - DB_CONN=postgresql://postgres:postgres@db:5432/postgres
+            - DB_CONN=postgresql://postgres:postgres@db:5432/odyssey_db
         depends_on:
         - db
 
@@ -47,11 +47,11 @@ services:
         volumes:
             - ./db:/var/lib/postgresql/data
         ports:
-            - "5432:5432"
+            - "5400:5432"
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=postgres
+            - POSTGRES_DB=odyssey_db
 
     pgadmin:
         image: dpage/pgadmin4

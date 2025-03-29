@@ -154,7 +154,7 @@ func (service *UserService) Register(registerInfo dto.Register) (user db.User, a
 	}
 
 	_, err = db.GetQueries().CreateRefreshToken(ctx, db.CreateRefreshTokenParams{
-		RefreshToken: rand.Text()[:24],
+		Token: rand.Text()[:24],
 		UserID:       user.ID,
 	})
 

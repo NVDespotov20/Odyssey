@@ -75,10 +75,10 @@ namespace WebHost.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("id");
 
-                    b.Property<string>("RefreshTokenValue")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("refresh_token_value");
+                        .HasColumnName("token");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -110,12 +110,12 @@ namespace WebHost.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b526a428-b473-4936-b905-39ca24ad3de4",
+                            Id = "ed863c51-9132-438e-97ff-2e2fdd360bb6",
                             Name = "user"
                         },
                         new
                         {
-                            Id = "46fd8eb9-40b1-4fac-9ec4-8695f7962f40",
+                            Id = "c354aaeb-b6f9-422f-b8a0-887fa4ea8940",
                             Name = "instructor"
                         });
                 });
@@ -128,7 +128,6 @@ namespace WebHost.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("AboutMe")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
                         .HasColumnName("about_me");

@@ -22,7 +22,7 @@ public class User
     public string Username { get; set; } = string.Empty;
 
     [MaxLength(500)]
-    public string AboutMe { get; set; } = string.Empty;
+    public string? AboutMe { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]

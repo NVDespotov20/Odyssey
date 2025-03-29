@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE refresh_tokens (
     id TEXT DEFAULT gen_random_uuid() PRIMARY KEY,
-    refresh_token TEXT NOT NULL,
+    token TEXT NOT NULL,
     user_id TEXT NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -23,7 +23,7 @@ CREATE TABLE sessions (
     end_time TIMESTAMPTZ NOT NULL,
     instructor_id TEXT NOT NULL,
     student_id TEXT NOT NULL,
-    accepted BOOLEAN DEFAULT 
+    accepted BOOLEAN DEFAULT FALSE NOT NULL,
     CONSTRAINT fk_instructor_id FOREIGN KEY(instructor_id) REFERENCES users(id),
     CONSTRAINT fk_student_id FOREIGN KEY(student_id) REFERENCES users(id)
 );

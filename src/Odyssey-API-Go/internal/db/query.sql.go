@@ -13,22 +13,22 @@ import (
 
 const createRefreshToken = `-- name: CreateRefreshToken :one
 INSERT INTO refresh_tokens(
-    refresh_token, user_id
+    token, user_id
 ) VALUES (
     $1, $2
 )
-RETURNING id, refresh_token, user_id
+RETURNING id, token, user_id
 `
 
 type CreateRefreshTokenParams struct {
-	RefreshToken string
-	UserID       string
+	Token  string
+	UserID string
 }
 
 func (q *Queries) CreateRefreshToken(ctx context.Context, arg CreateRefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRow(ctx, createRefreshToken, arg.RefreshToken, arg.UserID)
+	row := q.db.QueryRow(ctx, createRefreshToken, arg.Token, arg.UserID)
 	var i RefreshToken
-	err := row.Scan(&i.ID, &i.RefreshToken, &i.UserID)
+	err := row.Scan(&i.ID, &i.Token, &i.UserID)
 	return i, err
 }
 
@@ -39,7 +39,7 @@ INSERT INTO sessions(
 ) VALUES (
     $1, $2, $3, $4
 )
-RETURNING id, start_time, end_time, instructor_id, student_id
+RETURNING id, start_time, end_time, instructor_id, student_id, accepted
 `
 
 type CreateSessionParams struct {
@@ -63,6 +63,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 		&i.EndTime,
 		&i.InstructorID,
 		&i.StudentID,
+		&i.Accepted,
 	)
 	return i, err
 }
@@ -115,13 +116,13 @@ const deleteRefreshToken = `-- name: DeleteRefreshToken :one
 
 DELETE FROM refresh_tokens
 WHERE id = $1
-RETURNING id, refresh_token, user_id
+RETURNING id, token, user_id
 `
 
 func (q *Queries) DeleteRefreshToken(ctx context.Context, id string) (RefreshToken, error) {
 	row := q.db.QueryRow(ctx, deleteRefreshToken, id)
 	var i RefreshToken
-	err := row.Scan(&i.ID, &i.RefreshToken, &i.UserID)
+	err := row.Scan(&i.ID, &i.Token, &i.UserID)
 	return i, err
 }
 
@@ -129,7 +130,7 @@ const deleteSession = `-- name: DeleteSession :one
 
 DELETE FROM sessions
 WHERE id = $1
-RETURNING id, start_time, end_time, instructor_id, student_id
+RETURNING id, start_time, end_time, instructor_id, student_id, accepted
 `
 
 func (q *Queries) DeleteSession(ctx context.Context, id string) (Session, error) {
@@ -141,6 +142,7 @@ func (q *Queries) DeleteSession(ctx context.Context, id string) (Session, error)
 		&i.EndTime,
 		&i.InstructorID,
 		&i.StudentID,
+		&i.Accepted,
 	)
 	return i, err
 }
@@ -170,15 +172,15 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
 
 const getRefreshTokenByUserId = `-- name: GetRefreshTokenByUserId :one
 
-SELECT refresh_token FROM refresh_tokens
+SELECT token FROM refresh_tokens
 WHERE user_id = $1
 `
 
 func (q *Queries) GetRefreshTokenByUserId(ctx context.Context, userID string) (string, error) {
 	row := q.db.QueryRow(ctx, getRefreshTokenByUserId, userID)
-	var refresh_token string
-	err := row.Scan(&refresh_token)
-	return refresh_token, err
+	var token string
+	err := row.Scan(&token)
+	return token, err
 }
 
 const getSessionsByInstructorId = `-- name: GetSessionsByInstructorId :many
@@ -325,20 +327,20 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 
 const updateRefreshToken = `-- name: UpdateRefreshToken :one
 UPDATE refresh_tokens
-    SET refresh_token = $2
+    SET token = $2
 WHERE id = $1
-RETURNING id, refresh_token, user_id
+RETURNING id, token, user_id
 `
 
 type UpdateRefreshTokenParams struct {
-	ID           string
-	RefreshToken string
+	ID    string
+	Token string
 }
 
 func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRow(ctx, updateRefreshToken, arg.ID, arg.RefreshToken)
+	row := q.db.QueryRow(ctx, updateRefreshToken, arg.ID, arg.Token)
 	var i RefreshToken
-	err := row.Scan(&i.ID, &i.RefreshToken, &i.UserID)
+	err := row.Scan(&i.ID, &i.Token, &i.UserID)
 	return i, err
 }
 
@@ -365,7 +367,7 @@ type UpdateUserParams struct {
 	Email     string
 	Password  []byte
 	Salt      string
-	Deleted   pgtype.Bool
+	Deleted   bool
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {

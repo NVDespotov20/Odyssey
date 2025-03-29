@@ -21,7 +21,7 @@ type UserService struct {
 func validateInput(registerInfo dto.Register) (apiErr utils.APIError) {
 	regex, err := regexp2.Compile(`^\p{L}+.{2,24}$`, 0)
 	if err != nil {
-		apiErr.Message = "Internal error ANM"
+		apiErr.Message = "Internal error"
 		apiErr.Code = http.StatusInternalServerError
 		return
 	}
@@ -42,7 +42,7 @@ func validateInput(registerInfo dto.Register) (apiErr utils.APIError) {
 
 	regex, err = regexp2.Compile(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$`, 0)
 	if err != nil {
-		apiErr.Message = err.Error()
+		apiErr.Message = "Internal error"
 		apiErr.Code = http.StatusInternalServerError
 		return
 	}
@@ -56,7 +56,7 @@ func validateInput(registerInfo dto.Register) (apiErr utils.APIError) {
 
 	regex, err = regexp2.Compile(`^(?=.{8,32}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$`, 0)
 	if err != nil {
-		apiErr.Message = "Internal error EMAIl"
+		apiErr.Message = "Internal error"
 		apiErr.Code = http.StatusInternalServerError
 		return
 	}
@@ -70,7 +70,7 @@ func validateInput(registerInfo dto.Register) (apiErr utils.APIError) {
 
 	regex, err = regexp2.Compile(`^[A-Za-z0-9._-]{3,32}$`, 0)
 	if err != nil {
-		apiErr.Message = "Internal error USERNAME"
+		apiErr.Message = "Internal error"
 		apiErr.Code = http.StatusInternalServerError
 		return
 	}

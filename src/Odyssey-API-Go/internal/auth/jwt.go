@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 	"crypto"
-	"crypto/ed25519"
-	"crypto/sha256"
+	"crypto/rand"
+	"crypto/rsa"
 	"net/http"
 	"odysseyapi-go/internal/db"
 	"odysseyapi-go/internal/utils"
@@ -15,21 +15,21 @@ import (
 )
 
 const (
-	rTokenDuration time.Duration = time.Hour * 24 * 30
-	aTokenDuration time.Duration = time.Minute * 15
+	rTokenDuration time.Duration = time.Hour * 24 * 1825
+	aTokenDuration time.Duration = time.Hour * 24 * 365
 )
 
 var (
-	rTokenPrivateKey ed25519.PrivateKey
-	aTokenPrivateKey ed25519.PrivateKey
+	rTokenPrivateKey *rsa.PrivateKey
+	aTokenPrivateKey *rsa.PrivateKey
 )
 
 func GenerateKeys() {
-	seed := sha256.Sum256([]byte(os.Getenv("JWT_ACCESS_GEN_SECRET")))
-	aTokenPrivateKey = ed25519.NewKeyFromSeed(seed[:])
+	//seed := sha256.Sum224([]byte(os.Getenv("JWT_ACCESS_GEN_SECRET")))
+	aTokenPrivateKey, _ = rsa.GenerateKey(rand.Reader, 2048)
 
-	seed = sha256.Sum256([]byte(os.Getenv("JWT_REFRESH_GEN_SECRET")))
-	rTokenPrivateKey = ed25519.NewKeyFromSeed(seed[:])
+	//seed = sha256.Sum256([]byte(os.Getenv("JWT_REFRESH_GEN_SECRET")))
+	rTokenPrivateKey, _ = rsa.GenerateKey(rand.Reader, 2048)
 }
 
 func GetAccessPublicKey() crypto.PublicKey {
@@ -49,11 +49,11 @@ func GenerateRefreshToken(userid string) (string, utils.APIError) {
 }
 
 func ValidateAccessToken(tokenString string) (db.User, utils.APIError) {
-	return validateToken(tokenString, aTokenPrivateKey.Public(), false)
+	return validateToken(tokenString, GetAccessPublicKey(), false)
 }
 
 func ValidateRefreshToken(tokenString string) (db.User, utils.APIError) {
-	return validateToken(tokenString, rTokenPrivateKey.Public(), true)
+	return validateToken(tokenString, GetRefreshPublicKey(), true)
 }
 
 func validateToken(tokenString string, publicKey crypto.PublicKey, checkJti bool) (user db.User, apiErr utils.APIError) {
@@ -63,14 +63,14 @@ func validateToken(tokenString string, publicKey crypto.PublicKey, checkJti bool
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return publicKey, nil
 	},
-		jwt.WithValidMethods([]string{jwt.SigningMethodEdDSA.Alg()}),
+		//jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Alg()}),
 		jwt.WithLeeway(time.Second*5),
 		jwt.WithIssuer(os.Getenv("API_NAME")),
 		jwt.WithAudience(os.Getenv("API_NAME")))
 
 	if err != nil {
 		apiErr.Code = http.StatusUnauthorized
-		apiErr.Message = "Invalid JWT Token"
+		apiErr.Message = "Invalid JWT Token PUBLIC KEY IS KILLING ME"
 
 		return
 	}
@@ -118,7 +118,7 @@ func validateToken(tokenString string, publicKey crypto.PublicKey, checkJti bool
 	return
 }
 
-func generateToken(userid string, key ed25519.PrivateKey, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
+func generateToken(userid string, key *rsa.PrivateKey, duration time.Duration, applyJti bool) (tokenString string, apiErr utils.APIError) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -143,7 +143,7 @@ func generateToken(userid string, key ed25519.PrivateKey, duration time.Duration
 		ID:        refreshToken,
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
 	if applyJti {
 		token.Header["kid"] = os.Getenv("API_NAME")[:2] + "_refresh"

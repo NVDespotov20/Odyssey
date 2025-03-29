@@ -7,7 +7,7 @@ CREATE TABLE users (
     email TEXT UNIQUE NOT NULL,
     password bytea NOT NULL,
     salt TEXT NOT NULL,
-    deleted BOOLEAN DEFAULT NULL
+    deleted BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE refresh_tokens (
@@ -23,6 +23,7 @@ CREATE TABLE sessions (
     end_time TIMESTAMPTZ NOT NULL,
     instructor_id TEXT NOT NULL,
     student_id TEXT NOT NULL,
+    accepted BOOLEAN DEFAULT 
     CONSTRAINT fk_instructor_id FOREIGN KEY(instructor_id) REFERENCES users(id),
     CONSTRAINT fk_student_id FOREIGN KEY(student_id) REFERENCES users(id)
 );

@@ -66,16 +66,7 @@ func (handler *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 func (handler *UserHandler) FetchAccessToken(w http.ResponseWriter, r *http.Request) {
 	tokenString := r.Header.Get("Authorization")[len("Bearer "):]
 
-	user, apiErr := auth.ValidateRefreshToken(tokenString)
-
-	if apiErr.Message != "" {
-		utils.FormatError(w, map[string]any{
-			"message": apiErr.Message,
-		}, apiErr.Code)
-		return
-	}
-
-	tokenString, apiErr = auth.GenerateAccessToken(user.ID)
+	_, apiErr := auth.ValidateAccessToken(tokenString)
 
 	if apiErr.Message != "" {
 		utils.FormatError(w, map[string]any{
@@ -85,6 +76,6 @@ func (handler *UserHandler) FetchAccessToken(w http.ResponseWriter, r *http.Requ
 	}
 
 	utils.FormatData(w, map[string]any{
-		"accessToken": tokenString,
-	}, apiErr.Code)
+		"accessToken": "nice",
+	}, http.StatusOK)
 }

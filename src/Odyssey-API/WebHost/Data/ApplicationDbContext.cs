@@ -7,6 +7,7 @@ public class ApplicationDbContext : DbContext
 {
     DbSet<User> Users { get; set; }
     DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Image> Images { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

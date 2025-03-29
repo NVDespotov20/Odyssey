@@ -8,8 +8,8 @@ namespace WebHost.Services.Implementations;
 public class ImageService : IImageService
 {
     private readonly IFileService fileService;
-    private readonly ApplicationDbContext context;
-    public ImageService(IFileService fileService, ApplicationDbContext context)
+    private readonly OdysseyDbContext context;
+    public ImageService(IFileService fileService, OdysseyDbContext context)
     {
         this.fileService = fileService;
         this.context = context;

@@ -8,9 +8,9 @@ namespace WebHost.Services.Implementations;
 
 public class UserService : IUserService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly OdysseyDbContext _context;
 
-        public UserService(ApplicationDbContext context)
+        public UserService(OdysseyDbContext context)
         {
             _context = context;
         }
@@ -18,7 +18,7 @@ public class UserService : IUserService
         public async Task<UserViewModel?> GetUser(string userId)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == userId);
+                .FirstOrDefaultAsync(u => u.UserName == userId);
 
             if (user == null)
             {
@@ -28,7 +28,7 @@ public class UserService : IUserService
             return new UserViewModel
             {
                 Id = user.Id,
-                Username = user.Username,
+                Username = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -40,7 +40,7 @@ public class UserService : IUserService
         public async Task<bool> UpdateUser(UserInputModel user)
         {
             var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == user.Username);
+                .FirstOrDefaultAsync(u => u.UserName == user.Username);
 
             if (existingUser == null)
             {

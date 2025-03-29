@@ -1,15 +1,15 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebHost.Entities;
 
 namespace WebHost.Data;
 
-public class ApplicationDbContext : DbContext
+public class OdysseyDbContext : IdentityDbContext<User>
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Academy> Academies { get; set; }
     public DbSet<Image> Images { get; set; }
     
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public OdysseyDbContext(DbContextOptions<OdysseyDbContext> options)
         : base(options)
     {
     }

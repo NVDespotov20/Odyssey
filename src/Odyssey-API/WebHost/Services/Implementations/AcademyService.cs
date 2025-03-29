@@ -8,9 +8,9 @@ namespace WebHost.Services.Implementations;
 
 public class AcademyService : IAcademyService
     {
-        private readonly ApplicationDbContext _context; // Assuming you have a DbContext called ApplicationDbContext
+        private readonly OdysseyDbContext _context; // Assuming you have a DbContext called ApplicationDbContext
 
-        public AcademyService(ApplicationDbContext context)
+        public AcademyService(OdysseyDbContext context)
         {
             _context = context;
         }

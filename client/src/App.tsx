@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/sonner"
 
 const queryClient = new QueryClient()
 
+import Protected from './components/Protected'
+
 import Home from './routes/Home'
 import SignUp from './routes/SignUp'
 import SignIn from './routes/SignIn'
@@ -15,7 +17,7 @@ function App() {
         { path: '/', element: <Home /> },
         { path: '/signup', element: <SignUp /> },
         { path: '/login', element: <SignIn /> },
-        { path: '/browse', element: <Browse /> }
+        { path: '/browse', element: <Protected><Browse /> </Protected> }
     ])
 
     return (

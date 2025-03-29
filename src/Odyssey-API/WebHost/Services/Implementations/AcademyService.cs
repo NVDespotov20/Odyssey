@@ -16,7 +16,7 @@ public class AcademyService : IAcademyService
         }
 
         // Fetch an academy by its ID
-        public async Task<AcademyViewModel?> GetAcademy(string id)
+        public async Task<AcademyViewModel?> GetAcademyAsync(string id)
         {
             var academy = await _context.Academies
                 .FirstOrDefaultAsync(a => a.Id == id);
@@ -31,12 +31,13 @@ public class AcademyService : IAcademyService
                 Id = academy.Id,
                 Name = academy.Name,
                 Price = academy.Price,
-                Location = academy.Location
+                Location = academy.Location,
+                PhotoUrl = academy.PhotoUrl
             };
         }
 
         // Create a new academy
-        public async Task<AcademyViewModel> CreateAcademy(AcademyInputModel academy)
+        public async Task<AcademyViewModel> CreateAcademyAsync(AcademyInputModel academy)
         {
             Academy? existingAcademy = await _context.Academies
                 .FirstOrDefaultAsync(a => a.Id == academy.Id);
@@ -51,7 +52,8 @@ public class AcademyService : IAcademyService
                 Id = Guid.NewGuid().ToString(), // Use GUID or other strategy for unique IDs
                 Name = academy.Name,
                 Price = academy.Price,
-                Location = academy.Location
+                Location = academy.Location,
+                PhotoUrl = academy.PhotoUrl
             };
 
             _context.Academies.Add(newAcademy);
@@ -67,7 +69,7 @@ public class AcademyService : IAcademyService
         }
 
         // Update an existing academy
-        public async Task<AcademyViewModel> UpdateAcademy(AcademyInputModel academy)
+        public async Task<AcademyViewModel> UpdateAcademyAsync(AcademyInputModel academy)
         {
             Academy? existingAcademy = await _context.Academies
                 .FirstOrDefaultAsync(a => a.Id == academy.Id);
@@ -94,7 +96,7 @@ public class AcademyService : IAcademyService
         }
 
         // Delete an academy by its ID
-        public async Task<bool> DeleteAcademy(string id)
+        public async Task<bool> DeleteAcademyAsync(string id)
         {
             var academy = await _context.Academies
                 .FirstOrDefaultAsync(a => a.Id == id);
@@ -108,5 +110,20 @@ public class AcademyService : IAcademyService
             await _context.SaveChangesAsync();
 
             return true; // Successful deletion
+        }
+        
+        public async Task<IEnumerable<AcademyViewModel>> GetAcademiesAsync()
+        {
+            var academies = await _context.Academies
+                .Select(a => new AcademyViewModel
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Price = a.Price,
+                    Location = a.Location
+                })
+                .ToListAsync();
+
+            return academies;
         }
     }

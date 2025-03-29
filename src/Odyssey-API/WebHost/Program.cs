@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using WebHost.Data;
 using WebHost.Entities;
+using WebHost.Services.Contracts;
+using WebHost.Services.Implementations;
 
 namespace WebHost;
 
@@ -25,6 +28,11 @@ public class Program
 			.AddEntityFrameworkStores<OdysseyDbContext>()
 			.AddDefaultTokenProviders();
 
+		builder.Services.AddScoped<IAcademyService, AcademyService>();
+		builder.Services.AddScoped<IUserService, UserService>();
+		builder.Services.AddScoped<IFileService, FileService>();
+		builder.Services.AddScoped<IImageService, ImageService>();
+		builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 		
 		var rsa = RSA.Create();
 		rsa.ImportFromPem(builder.Configuration["JWT:Public"]);
@@ -49,7 +57,31 @@ public class Program
 
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen();
+		builder.Services.AddSwaggerGen(options =>
+		{
+			options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+			{
+				Name = "Authorization",
+				In = ParameterLocation.Header,
+				Type = SecuritySchemeType.Http,
+				Scheme = "Bearer"
+			});
+
+			options.AddSecurityRequirement(new OpenApiSecurityRequirement
+			{
+				{
+					new OpenApiSecurityScheme
+					{
+						Reference = new OpenApiReference
+						{
+							Type = ReferenceType.SecurityScheme,
+							Id = "Bearer"
+						}
+					},
+					Array.Empty<string>()
+				}
+			});
+		});
 
 		var app = builder.Build();
 		

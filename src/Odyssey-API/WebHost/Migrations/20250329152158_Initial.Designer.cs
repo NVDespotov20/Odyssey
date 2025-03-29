@@ -12,8 +12,8 @@ using WebHost.Data;
 namespace WebHost.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250329131710_Add_Roles")]
-    partial class Add_Roles
+    [Migration("20250329152158_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,23 +92,13 @@ namespace WebHost.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4d3505db-db4d-480e-a0cd-79da2d89ecb1",
+                            Id = "9a75408f-78a2-48d5-8e92-c77213feed05",
                             Name = "user"
                         },
                         new
                         {
-                            Id = "575a7629-2450-4dd7-afae-56abf05870bb",
-                            Name = "admin"
-                        },
-                        new
-                        {
-                            Id = "fe2bbdd8-b375-4b8a-a610-34509f336c09",
+                            Id = "73a023da-5442-432c-8db0-c6165b772e28",
                             Name = "instructor"
-                        },
-                        new
-                        {
-                            Id = "618f20dd-ae11-43cb-a5d1-5f938fc9953b",
-                            Name = "academy"
                         });
                 });
 

@@ -58,9 +58,7 @@ public class ApplicationDbContext : DbContext
             modelBuilder.Entity<Role>()
                 .HasData(
                     new Role { Id = Guid.NewGuid().ToString(), Name = "user" },
-                    new Role { Id = Guid.NewGuid().ToString(), Name = "admin" },
-                    new Role { Id = Guid.NewGuid().ToString(), Name = "instructor" },
-                    new Role { Id = Guid.NewGuid().ToString(), Name = "academy" }
+                    new Role { Id = Guid.NewGuid().ToString(), Name = "instructor" }
                 );
     }
     private string ConvertToSnakeCase(string input, bool plural = false)

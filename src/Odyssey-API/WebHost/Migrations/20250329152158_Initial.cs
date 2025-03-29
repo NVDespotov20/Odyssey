@@ -7,7 +7,7 @@
 namespace WebHost.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_Roles : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -112,10 +112,8 @@ namespace WebHost.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { "4d3505db-db4d-480e-a0cd-79da2d89ecb1", "user" },
-                    { "575a7629-2450-4dd7-afae-56abf05870bb", "admin" },
-                    { "618f20dd-ae11-43cb-a5d1-5f938fc9953b", "academy" },
-                    { "fe2bbdd8-b375-4b8a-a610-34509f336c09", "instructor" }
+                    { "73a023da-5442-432c-8db0-c6165b772e28", "instructor" },
+                    { "9a75408f-78a2-48d5-8e92-c77213feed05", "user" }
                 });
 
             migrationBuilder.CreateIndex(

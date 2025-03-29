@@ -5,8 +5,10 @@ namespace WebHost.Data;
 
 public class ApplicationDbContext : DbContext
 {
-    DbSet<User> Users { get; set; }
-    DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Academy> Academies { get; set; }
     public DbSet<Image> Images { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

@@ -47,6 +47,27 @@ namespace WebHost.Migrations
                     b.ToTable("academys");
                 });
 
+            modelBuilder.Entity("WebHost.Entities.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("file_name");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("path");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("images");
+                });
+
             modelBuilder.Entity("WebHost.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Id")
@@ -89,12 +110,12 @@ namespace WebHost.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9a75408f-78a2-48d5-8e92-c77213feed05",
+                            Id = "b526a428-b473-4936-b905-39ca24ad3de4",
                             Name = "user"
                         },
                         new
                         {
-                            Id = "73a023da-5442-432c-8db0-c6165b772e28",
+                            Id = "46fd8eb9-40b1-4fac-9ec4-8695f7962f40",
                             Name = "instructor"
                         });
                 });

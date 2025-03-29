@@ -16,6 +16,4 @@ public class Academy
 
     [Required]
     public decimal Price { get; set; }
-
-    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

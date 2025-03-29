@@ -1,8 +1,71 @@
+import Nav from "@/components/Nav"
+import InstitutionCorousel from "@/components/InstitutionCorousel"
 
 export default function Browse() {
+    const data = {
+        page: 0,
+        totalPages: 100,
+        pageSize: 5,
+        data: [
+            {
+                id: "guid",
+                name: "Alo",
+                price: 10000,
+                photo: "url",
+                location: "Sofia blah blah blah",
+                instructors: [
+                    {
+                        name: "John Doe",
+                        pfp: "url",
+                        about: "str",
+                        experiance: "10 years"
+                    },
+                    {
+                        name: "Jane Doe",
+                        pfp: "url",
+                        about: "str",
+                        experiance: "3 years"
+                    },
+                    {
+                        name: "Mitko",
+                        pfp: "url",
+                        about: "str",
+                        experiance: "4 years"
+                    }
+                ]
+            },
+            {
+                id: "guid",
+                name: "Alo",
+                price: 10000,
+                photo: "url",
+                location: "Sofia blah blah blah",
+                instructors: [
+                    {
+                        name: "John Doe",
+                        pfp: "url",
+                        about: "str",
+                        experiance: "10 years"
+                    }
+                ]
+            }
+        ]
+    }
+
+
     return (
-        <div>
-            <h1>Browse</h1>
+        <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5] gap-5">
+            <Nav />
+
+            <div className="flex flex-col">
+                {
+                    // @ts-nocheck
+                    data.data.map((item) => {
+                        // @ts-nocheck
+                        return <InstitutionCorousel key={item.page} data={item} />
+                    })
+                }
+            </div>
         </div>
     )
 }

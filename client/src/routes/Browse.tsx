@@ -8,7 +8,7 @@ export default function Browse() {
         pageSize: 5,
         data: [
             {
-                id: "guid",
+                id: "guid1",
                 name: "Alo",
                 price: 10000,
                 photo: "url",
@@ -17,7 +17,7 @@ export default function Browse() {
                     {
                         name: "John Doe",
                         pfp: "url",
-                        about: "str",
+                        about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
                         experiance: "10 years"
                     },
                     {
@@ -35,7 +35,7 @@ export default function Browse() {
                 ]
             },
             {
-                id: "guid",
+                id: "guid23",
                 name: "Alo",
                 price: 10000,
                 photo: "url",

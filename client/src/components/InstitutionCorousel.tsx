@@ -23,13 +23,13 @@ export default function InstitutionCorousel({ data }: { data: InstitutionDataTyp
                     className="h-full flex gap-3"
                 >
                     <CarouselItem key={-1} className="md:basis-2/3 lg:basis-3/4 h-[50vh]">
-                        <InstitutionCard data={data} />
+                        <InstitutionCard data={data} id={data.id} />
                     </CarouselItem>
 
                     {
                         data.instructors.map((item, index) => {
                             return (<CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4 min-h-full">
-                                <InstructorCard data={item} />
+                                <InstructorCard data={item} variant="noneclickable" size="small" />
                             </CarouselItem>
                             )
                         })

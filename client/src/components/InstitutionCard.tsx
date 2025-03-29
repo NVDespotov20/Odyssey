@@ -1,10 +1,13 @@
 import { Card, CardContent } from "./ui/card"
 import { MapPin } from "lucide-react"
 import { InstitutionDataType } from "@/types/institutionDataTypes"
+import { useNavigate } from "react-router-dom"
 
-export default function InstitutionCard({ data }: { data: InstitutionDataType }) {
+export default function InstitutionCard({ data, id }: { data: InstitutionDataType, id: string }) {
+    const navigate = useNavigate()
+
     return (
-        <div className="h-full cursor-pointer">
+        <div onClick={() => { navigate(`/institution?id=${id}`) }} className="h-full cursor-pointer">
             <Card className="h-full relative">
                 <CardContent className="flex p-4 h-full flex-col gap-5">
                     <div className="absolute top-0 left-0 w-full h-full">
@@ -22,7 +25,7 @@ export default function InstitutionCard({ data }: { data: InstitutionDataType })
                         </div>
                         <div className="flex gap-2 items-center text">
                             <p>BGN</p>
-                            <span>{data.location}</span>
+                            <span>{data.price}</span>
                         </div>
                     </div>
                 </CardContent>

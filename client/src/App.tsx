@@ -11,13 +11,15 @@ import Home from './routes/Home'
 import SignUp from './routes/SignUp'
 import SignIn from './routes/SignIn'
 import Browse from './routes/Browse'
+import Institution from './routes/Institution'
 
 function App() {
     const BrowserRouter = createBrowserRouter([
         { path: '/', element: <Home /> },
         { path: '/signup', element: <SignUp /> },
         { path: '/login', element: <SignIn /> },
-        { path: '/browse', element: <Protected><Browse /> </Protected> }
+        { path: '/browse', element: <Protected><Browse /> </Protected> },
+        { path: '/institution', element: <Protected><Institution /></Protected> }
     ])
 
     return (

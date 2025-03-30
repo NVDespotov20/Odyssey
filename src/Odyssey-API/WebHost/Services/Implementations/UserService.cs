@@ -73,4 +73,22 @@ public class UserService : IUserService
 
             return true;
         }
+        
+        public async Task<IEnumerable<UserViewModel>> GetUsers()
+        {
+            var users = await _context.Users
+                .Where(u => u.Deleted == false)
+                .Select(u => new UserViewModel
+                {
+                    Id = u.Id,
+                    Username = u.UserName!,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email!,
+                    AboutMe = u.AboutMe!
+                })
+                .ToListAsync();
+
+            return users;
+        }
     }

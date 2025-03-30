@@ -15,7 +15,7 @@ export default function InstructorCard({ data, variant, size }: { data: Instruct
                     </Avatar>
 
                     <div className="flex flex-col gap-1 items-center select-none">
-                        <h1 className="text-xl font-bold">{data.name}</h1>
+                        <h1 className="text-xl font-bold">{data.firstName + ' ' + data.lastName}</h1>
                         <p className="text-sm">{data.experiance}</p>
                     </div>
 

@@ -4,7 +4,7 @@ import { Avatar, AvatarImage } from "./ui/avatar"
 import { Badge } from "./ui/badge"
 import { Skeleton } from "./ui/skeleton"
 
-export default function ProfileAvatar({ name, role, className, isLoading }: { name?: string, role?: string, className?: string, isLoading?: boolean }) {
+export default function ProfileAvatar({ name, className, isLoading }: { name?: string, role?: string, className?: string, isLoading?: boolean }) {
     const navigate = useNavigate()
 
     return (

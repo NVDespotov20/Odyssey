@@ -29,6 +29,7 @@ export default function InstitutionCorousel({ data }: { data: InstitutionDataTyp
                     {
                         data.instructors &&
                         data.instructors.map((item, index) => {
+                            console.log(item)
                             return (<CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4 min-h-full">
                                 <InstructorCard data={item} variant="noneclickable" size="small" />
                             </CarouselItem>

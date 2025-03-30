@@ -12,6 +12,8 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { TimePicker } from "@/components/ui/datetime"
+import {useQuery} from "@tanstack/react-query";
+import {academyAPI} from "@/apis/academyAPI.ts";
 
 export default function Instructor() {
     const [searchParams] = useSearchParams();
@@ -28,6 +30,20 @@ export default function Instructor() {
         { start: "20:00", end: "21:00" }
     ]);
 
+
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['institution'],
+        queryFn: () => academyAPI.getInstructor(id)
+    })
+
+    if (isLoading) {
+        return
+    }
+
+    if (isError) {
+        return
+    }
+
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
             <Nav isSeachVisible={false} />
@@ -37,8 +53,8 @@ export default function Instructor() {
                         <AvatarImage className="select-none" src="/public/placeholder.png"></AvatarImage>
                     </Avatar>
                     <div className="flex flex-col gap-1 items-center select-none">
-                        <h1 className="text-2xl font-bold">John Doe</h1>
-                        <p className="text-xl">10 years</p>
+                        <h1 className="text-2xl font-bold">{data.firstName + ' ' + data.lastName}</h1>
+                        <p className="text-xl">10 years of experience</p>
                     </div>
 
                 </div>
@@ -46,11 +62,7 @@ export default function Instructor() {
                 <Button onClick={() => { setIsDatePickerModalOpened(true) }} className="py-6 px-20">Book</Button>
             </div>
             <div className="flex justify-center items-center">
-                <p className="w-[90ch] text-lg"> Oh, shut up! Next. What do we got? This little wooden puppet. I'm not a puppet, I'm a real boy. Five
-                    shillings for the possessed toy. Take it away. No! Please, don't let them do it! Next. What do you
-                    got? Well, I've got a talking donkey! Right. Well that's good for ten schillings, if you can prove it. Oh,
-                    go ahead fella. Well?
-                </p>
+                <p className="w-[90ch] text-lg"> {data.about}</p>
             </div>
 
             <Dialog open={isDatePickerModalOpened} onOpenChange={setIsDatePickerModalOpened}>
@@ -69,7 +81,7 @@ export default function Instructor() {
                                 )}
                             </div>
 
-                            <Button>BOOK</Button>
+                            <Button onClick={() => {setIsDatePickerModalOpened(false)}}>BOOK</Button>
                         </div>
 
                         <div className="flex w-full justify-center items-center flex-col gap-5">

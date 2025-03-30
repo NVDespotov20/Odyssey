@@ -11,9 +11,11 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import cn from "../lib/utils";
+import {appointmentsAPI} from "@/apis/appointmentsAPI.ts";
+import {useQuery} from "@tanstack/react-query";
 
 export default function Profile() {
-    const preSelectedDates = [new Date(2025, 2, 10), new Date(2025, 2, 15)];
+    const preSelectedDates = [new Date(2025, 4, 10), new Date(2025, 4, 15)];
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
     const [times, setTimes] = useState([]);
     const [isDatePickerModalOpened, setIsDatePickerModalOpened] = useState(false);
@@ -23,7 +25,6 @@ export default function Profile() {
         { start: "14:00", end: "15:00" },
         { start: "20:00", end: "21:00" }
     ]);
-
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
@@ -37,7 +38,6 @@ export default function Profile() {
                         <h1 className="text-2xl font-bold">John Doe</h1>
                         <p className="text-xl">10 years</p>
                     </div>
-
                 </div>
 
                 <div className="flex gap-5">
@@ -46,10 +46,8 @@ export default function Profile() {
                 </div>
             </div>
             <div className="flex justify-center items-center">
-                <p className="w-[90ch] text-lg"> Oh, shut up! Next. What do we got? This little wooden puppet. I'm not a puppet, I'm a real boy. Five
-                    shillings for the possessed toy. Take it away. No! Please, don't let them do it! Next. What do you
-                    got? Well, I've got a talking donkey! Right. Well that's good for ten schillings, if you can prove it. Oh,
-                    go ahead fella. Well?
+                <p className="w-[90ch] text-lg">
+                    With over 10 years of experience in aviation, I am passionate about mentoring the next generation of pilots. I combine a strong foundation in both theory and practical flying skills to deliver clear, hands-on instruction. My background spans commercial, private, and simulation training, allowing me to tailor lessons to each student’s unique needs. Committed to upholding the highest safety standards, I strive to build confident, well-prepared pilots ready to excel in any flying environment.
                 </p>
             </div>
 

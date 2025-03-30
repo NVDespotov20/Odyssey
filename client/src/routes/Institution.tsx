@@ -19,6 +19,10 @@ export default function Insitution() {
         return
     }
 
+    if (isError) {
+        return
+    }
+
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
             <Nav isSeachVisible={false} />
@@ -39,10 +43,7 @@ export default function Insitution() {
 
                 <div className="flex w-full justify-center  my-10">
                     <div className="flex gap-3 text-cente w-[90ch]">
-                        <p>Once upon a time there was a lovely princess. But she had an enchantment upon her of a fearful
-                            sort, which could only be broken by Love's first kiss. She was locked away in a castle guarded by a
-                            terrible fire breathing dragon. Many brave knights had attempted to free her from this dreadful
-                            prison, but none prevailed.</p>
+                        <p>{data.about}</p>
                     </div>
                 </div>
             </div>

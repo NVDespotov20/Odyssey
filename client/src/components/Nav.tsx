@@ -12,7 +12,7 @@ export default function Nav({ isSeachVisible = true, search }: { isSeachVisible?
                 // @ts-nocheck
                 isSeachVisible && <Input onChange={(e: any) => search(e.target.value)} placeholder="Search" className={`w-2/4 ${!isSeachVisible ? "hidden" : ""}`} />
             }
-            <ProfileAvatar name="John Doe" role="admin" />
+            <ProfileAvatar name="John Doe" />
         </div>
     )
 }

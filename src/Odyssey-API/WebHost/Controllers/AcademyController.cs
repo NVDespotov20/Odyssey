@@ -10,18 +10,15 @@ namespace WebHost.Controllers;
 /// Controller for managing academies
 /// </summary>
 [ApiController]
+[Authorize(Policy = "UserOnly")]
 [Route("[controller]")]
 public class AcademiesController : ControllerBase
 {
-    private readonly IAcademyService academyService;
-    private readonly IConfiguration configuration;
-    private readonly string AESKey;
-    
+    private readonly IAcademyService _academyService;
+
     public AcademiesController(IAcademyService academyService, IConfiguration configuration)
     {
-        this.academyService = academyService;
-        this.configuration = configuration;
-        this.AESKey = this.configuration["Encryption:AESKey"]!;
+        this._academyService = academyService;
     }
     
     /// <summary>
@@ -29,12 +26,11 @@ public class AcademiesController : ControllerBase
     /// </summary>
     /// <returns>All academies</returns>
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetAcademies()
     {
         try
         {
-            IEnumerable<AcademyViewModel> academies = await this.academyService.GetAcademiesAsync();
+            IEnumerable<AcademyViewModel> academies = await this._academyService.GetAcademiesAsync();
             return Ok(academies);
         }
         catch (Exception ex)
@@ -49,12 +45,11 @@ public class AcademiesController : ControllerBase
     /// <param name="id">Academy id</param>
     /// <returns>Academy</returns>
     [HttpGet("{id}")]
-    [Authorize]
     public async Task<IActionResult> GetAcademy(string id)
     {
         try
         {
-            AcademyViewModel? academy = await this.academyService.GetAcademyAsync(id);
+            AcademyViewModel? academy = await this._academyService.GetAcademyAsync(id);
             if (academy == null)
             {
                 return NotFound();
@@ -73,12 +68,11 @@ public class AcademiesController : ControllerBase
     /// <param name="academy">Academy data</param>
     /// <returns>Created academy</returns>
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> CreateAcademy(AcademyInputModel academy)
     {
         try
         {
-            AcademyViewModel newAcademy = await this.academyService.CreateAcademyAsync(academy);
+            AcademyViewModel newAcademy = await this._academyService.CreateAcademyAsync(academy);
             return Ok(newAcademy);
         }
         catch (Exception ex)
@@ -93,12 +87,11 @@ public class AcademiesController : ControllerBase
     /// <param name="academy">Academy data</param>
     /// <returns>Updated academy</returns>
     [HttpPut]
-    [Authorize]
     public async Task<IActionResult> UpdateAcademy(AcademyInputModel academy)
     {
         try
         {
-            AcademyViewModel updatedAcademy = await this.academyService.UpdateAcademyAsync(academy);
+            AcademyViewModel updatedAcademy = await this._academyService.UpdateAcademyAsync(academy);
             return Ok(updatedAcademy);
         }
         catch (Exception ex)
@@ -113,12 +106,11 @@ public class AcademiesController : ControllerBase
     /// <param name="id">Academy id</param>
     /// <returns>Success</returns>
     [HttpDelete("{id}")]
-    [Authorize]
     public async Task<IActionResult> DeleteAcademy(string id)
     {
         try
         {
-            bool result = await this.academyService.DeleteAcademyAsync(id);
+            bool result = await this._academyService.DeleteAcademyAsync(id);
             if (!result)
             {
                 return NotFound();
@@ -130,6 +122,4 @@ public class AcademiesController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
-    // TODO: Implement enroll
 }

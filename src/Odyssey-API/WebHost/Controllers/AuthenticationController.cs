@@ -14,16 +14,18 @@ public class AuthenticationController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
     public AuthenticationController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        IConfiguration configuration)
+        IConfiguration configuration, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
+        _roleManager = roleManager;
     }
 
     [HttpPost("register")]
@@ -32,6 +34,19 @@ public class AuthenticationController : Controller
         var user = new User { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded) return BadRequest(result.Errors);
+
+        if (model.Role == "null" || model.Role == "")
+        {
+            await _userManager.AddToRoleAsync(user, "user");
+        }
+        else if (!(await _roleManager.RoleExistsAsync(model.Role)))
+        {
+            return BadRequest("Invalid role");
+        }
+        else
+        {
+            await _userManager.AddToRoleAsync(user, model.Role);
+        }
 
         return Ok();
     }
@@ -56,13 +71,22 @@ public class AuthenticationController : Controller
         rsa.ImportFromPem(_configuration["JWT:Private"]);
         var rsaKey = new RsaSecurityKey(rsa);
 
-        var claims = new[]
+        // Retrieve the user's roles
+        var roles = _userManager.GetRolesAsync(user).Result;
+
+        // Create claims, including role claims
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Id)
         };
 
+        // Add role claims
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
         var credentials = new SigningCredentials(rsaKey, SecurityAlgorithms.RsaSha256);
 
         var token = new JwtSecurityToken(

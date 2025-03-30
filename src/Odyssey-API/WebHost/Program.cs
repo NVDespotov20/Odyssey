@@ -28,6 +28,8 @@ public class Program
 			.AddEntityFrameworkStores<OdysseyDbContext>()
 			.AddDefaultTokenProviders();
 
+		
+		
 		builder.Services.AddScoped<IAcademyService, AcademyService>();
 		builder.Services.AddScoped<IUserService, UserService>();
 		builder.Services.AddScoped<IFileService, FileService>();
@@ -54,6 +56,11 @@ public class Program
 					IssuerSigningKey = rsaKey,
 				};
 			});
+		builder.Services.AddAuthorization(options =>
+		{
+			options.AddPolicy("InstructorOnly", policy => policy.RequireRole("Instructor"));
+			options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+		});
 
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();

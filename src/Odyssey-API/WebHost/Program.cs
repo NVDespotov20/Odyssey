@@ -35,6 +35,7 @@ public class Program
 		builder.Services.AddScoped<IFileService, FileService>();
 		builder.Services.AddScoped<IImageService, ImageService>();
 		builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+		builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 		
 		var rsa = RSA.Create();
 		rsa.ImportFromPem(builder.Configuration["JWT:Public"]);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebHost.Entities;
 using WebHost.Models;
+using WebHost.Services.Contracts;
 using WebHost.Services.Implementations;
 
 namespace WebHost.Controllers;
@@ -13,12 +14,14 @@ namespace WebHost.Controllers;
 public class AppointmentController : Controller
 {
     private readonly UserManager<User> _userManager;
+    private readonly ICurrentUser _currentUser;
     private readonly AppointmentService _appointmentService;
 
-    public AppointmentController(UserManager<User> userManager, AppointmentService appointmentService)
+    public AppointmentController(UserManager<User> userManager, AppointmentService appointmentService, ICurrentUser currentUser)
     {
         _userManager = userManager;
         _appointmentService = appointmentService;
+        _currentUser = currentUser;
     }
 
     [HttpGet("User")]
@@ -31,10 +34,17 @@ public class AppointmentController : Controller
 
     [HttpGet("getDay")]
     [Authorize]
-    public async Task<IActionResult> GetAppoinmentsForInstructorForDay(string userId, DateTime date)
+    public async Task<IActionResult> GetAppointmentsForInstructorForDay(string userId, DateTime date)
     {
         var appointments = await _appointmentService.GetUserAppointmentsForDayAsync(userId, date);
-        return Ok(appointments.Select(a => new { a.StartTime, a.EndTime }).ToList());
+        return Ok(appointments.Select(a => new { a.StartTime, a.EndTime, a.Status }).ToList());
+    }
+    [HttpGet("getMonth")]
+    [Authorize]
+    public async Task<IActionResult> GetAppointmentsForInstructorForMonth(string userId, DateTime date)
+    {
+        var appointments = await _appointmentService.GetUserAppointmentsForMonthAsync(userId, date);
+        return Ok(appointments.Select(a => new { a.StartTime, a.EndTime, a.Status }).ToList());
     }
 
     [HttpGet("getById")]
@@ -57,9 +67,13 @@ public class AppointmentController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<Appointment> CreateAppointment(AppointmentInputModel model)
+    public async Task<IActionResult> CreateAppointment(AppointmentInputModel model)
     {
-        return await _appointmentService.CreateAppointmentAsync(model);
+        model.StudentId = _currentUser.UserId;
+        model.Status = "Pending";
+        if(ModelState.IsValid)
+            return Ok(await _appointmentService.CreateAppointmentAsync(model));
+        return BadRequest();
     }
 
     [HttpPut("Update")]

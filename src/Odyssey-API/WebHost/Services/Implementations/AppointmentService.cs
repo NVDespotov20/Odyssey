@@ -15,7 +15,7 @@ public class AppointmentService : IAppointmentService
         this.context = context;
     }
 
-    public async Task<Appointment> CreateAppointmentAsync(AppointmentInputModel appointment)
+    public async Task<string> CreateAppointmentAsync(AppointmentInputModel appointment)
     {
         var newAppointment = new Appointment()
         {
@@ -23,12 +23,12 @@ public class AppointmentService : IAppointmentService
             StudentId = appointment.StudentId,
             StartTime = appointment.StartTime,
             EndTime = appointment.EndTime,
-            Status = "new"
+            Status = appointment.Status,
         };
         await context.Appointments.AddAsync(newAppointment);
         
         await context.SaveChangesAsync();
-        return newAppointment;
+        return newAppointment.Id;
     }
 
     public async Task<Appointment> UpdateAppointmentAsync(Appointment appointment)
@@ -83,7 +83,19 @@ public class AppointmentService : IAppointmentService
         return await context.Appointments.Where(a =>
                 a.InstructorId == userId &&
                 a.StartTime.DayOfYear == date.DayOfYear &&
-                a.EndTime.DayOfYear == date.DayOfYear)
+                a.EndTime.DayOfYear == date.DayOfYear &&
+                a.StartTime.Year == date.Year &&
+                a.EndTime.Year == date.Year)
+            .ToListAsync();  
+    }
+    public async Task<IEnumerable<Appointment>> GetUserAppointmentsForMonthAsync(string userId, DateTime date)
+    {
+        return await context.Appointments.Where(a =>
+                a.InstructorId == userId &&
+                a.StartTime.Month == date.Month &&
+                a.EndTime.Month == date.Month &&
+                a.StartTime.Year == date.Year &&
+                a.EndTime.Year == date.Year)
             .ToListAsync();  
     }
 

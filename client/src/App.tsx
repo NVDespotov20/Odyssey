@@ -13,6 +13,7 @@ import SignIn from './routes/SignIn'
 import Browse from './routes/Browse'
 import Institution from './routes/Institution'
 import Instructor from './routes/Instructor'
+import Profile from './routes/Profile'
 
 function App() {
     const BrowserRouter = createBrowserRouter([
@@ -21,7 +22,8 @@ function App() {
         { path: '/login', element: <SignIn /> },
         { path: '/browse', element: <Protected><Browse /> </Protected> },
         { path: '/institution', element: <Protected><Institution /></Protected> },
-        { path: '/instructor', element: <Protected><Instructor /></Protected> }
+        { path: '/instructor', element: <Protected><Instructor /></Protected> },
+        { path: '/profile', element: <Protected><Profile /></Protected> }
     ])
 
     return (

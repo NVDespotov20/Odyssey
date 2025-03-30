@@ -2,7 +2,7 @@ import ProfileAvatar from "./ProfileAvatar"
 import { Input } from "./ui/input"
 import { useNavigate } from "react-router-dom";
 
-export default function Nav({ isSeachVisible = true, search }: { isSeachVisible?: boolean, search: (text: string) => void }) {
+export default function Nav({ isSeachVisible = true, search }: { isSeachVisible?: boolean, search?: (text: string) => void }) {
     const navigate = useNavigate();
 
     return (

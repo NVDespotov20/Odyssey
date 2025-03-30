@@ -21,7 +21,6 @@ export default function ProfileAvatar({ name, role, className, isLoading }: { na
                 : <div onClick={() => { navigate('/profile') }} className={`text-text-50 flex gap-5 justify-center items-center cursor-pointer hover:bg-background-800 px-4 py-2 rounded-md transition-all hover:scale-105 active:scale-100 ${className}`}>
                     <div className="flex justify-center items-center flex-col">
                         <h1 className="font-bold text-lg">{name}</h1>
-                        <Badge className="text-black bg-accent">{role?.toUpperCase()}</Badge>
                     </div>
                     <Avatar>
                         <AvatarImage src={`https://ui-avatars.com/api/?name=${name}&size=128&background=60494d&color=fff&bold=true`} />

@@ -28,7 +28,29 @@ public class Program
 			.AddEntityFrameworkStores<OdysseyDbContext>()
 			.AddDefaultTokenProviders();
 
-		
+		if (builder.Environment.IsDevelopment())
+		{
+			builder.Services.AddCors(options =>
+			{
+				// ReSharper disable once VariableHidesOuterVariable
+				options.AddDefaultPolicy(builder =>
+					builder
+						.AllowAnyOrigin()
+						.AllowAnyMethod()
+						.AllowAnyHeader());
+			});
+		}
+		else
+		{
+			builder.Services.AddCors(options =>
+			{
+				options.AddDefaultPolicy(builder =>
+					builder
+						.WithOrigins("http://localhost:5173")
+						.AllowAnyMethod()
+						.AllowAnyHeader());
+			});
+		}
 		
 		builder.Services.AddScoped<IAcademyService, AcademyService>();
 		builder.Services.AddScoped<IUserService, UserService>();
@@ -109,6 +131,8 @@ public class Program
 		app.UseSwagger();
 		app.UseSwaggerUI();
 
+		app.UseCors();
+		
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.MapControllers();

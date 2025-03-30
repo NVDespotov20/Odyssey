@@ -9,7 +9,7 @@ using WebHost.Models;
 
 namespace WebHost.Controllers;
 
-[Route("api/auth")]
+[Route("/api/auth")]
 public class AuthenticationController : Controller
 {
     private readonly UserManager<User> _userManager;

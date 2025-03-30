@@ -11,9 +11,9 @@ export type SignUpData = {
 
 export const authAPI = {
     signUp: async (data: SignUpData) => {
-        return (await axios.post('/users/register', data, axiosConfigGo)).data;
+        return (await axios.post('/api/auth/register', data, axiosConfigGo)).data;
     },
     signIn: async (data: { username: string, password: string }) => {
-        return (await axios.post('/users/login', data, axiosConfigGo)).data;
+        return (await axios.post('/api/auth/login', data, axiosConfigGo)).data;
     }
 };

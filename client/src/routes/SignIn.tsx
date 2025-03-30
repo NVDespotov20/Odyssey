@@ -17,8 +17,7 @@ export default function SignIn() {
     const loginUserMutation = useMutation({
         mutationFn: authAPI.signIn,
         onSuccess: (data) => {
-            localStorage.setItem('accessToken', data.data.accessToken)
-            localStorage.setItem('refreshToken', data.data.refreshToken)
+            localStorage.setItem('accessToken', data.token)
             window.location.href = "/browse"
         },
     })

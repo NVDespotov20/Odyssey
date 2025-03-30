@@ -1,7 +1,11 @@
 import Nav from "@/components/Nav"
+import { useState } from "react"
 import InstitutionCorousel from "@/components/InstitutionCorousel"
+import { Search } from "lucide-react"
 
 export default function Browse() {
+    const [searchText, setSearchText] = useState("")
+
     const data = {
         page: 0,
         totalPages: 100,
@@ -55,15 +59,19 @@ export default function Browse() {
         ]
     }
 
+    const filteredData = data.data.filter((item) => {
+        return item.name.toLowerCase().includes(searchText.toLowerCase())
+    })
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5] gap-5">
-            <Nav />
+            {/* // @ts-nocheck */}
+            <Nav search={setSearchText} />
 
             <div className="flex flex-col">
                 {
                     // @ts-nocheck
-                    data.data.map((item) => {
+                    filteredData.map((item) => {
                         // @ts-nocheck
                         return <InstitutionCorousel key={item.page} data={item} />
                     })

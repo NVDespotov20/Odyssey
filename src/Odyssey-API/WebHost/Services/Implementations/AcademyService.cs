@@ -32,7 +32,13 @@ public class AcademyService : IAcademyService
                 Name = academy.Name,
                 Price = academy.Price,
                 Location = academy.Location,
-                PhotoUrl = academy.PhotoUrl
+                PhotoUrl = academy.PhotoUrl,
+                Instructors = academy.Users.Select(i => new UserViewModel
+                {
+                    Id = i.Id,
+                    FirstName = i.FirstName,
+                    LastName = i.LastName
+                })
             };
         }
 

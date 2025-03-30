@@ -3,41 +3,50 @@ import { MapPin } from "lucide-react"
 import Nav from "@/components/Nav"
 
 import InstructorCard from "@/components/InstructorCard"
+import {useQuery} from "@tanstack/react-query";
+import {academyAPI} from "@/apis/academyAPI.ts";
 
 export default function Insitution() {
     const [searchParams] = useSearchParams()
     const institutionId = searchParams.get("id")
 
-    const data = {
-        id: "guid1",
-        name: "Alo",
-        price: 10000,
-        photo: "url",
-        location: "Sofia blah blah blah",
-        instructors: [
-            {
-                id: "guid2",
-                name: "John Doe",
-                pfp: "url",
-                about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
-                experiance: "10 years"
-            },
-            {
-                id: "guid3",
-                name: "Jane Doe",
-                pfp: "url",
-                about: "str",
-                experiance: "3 years"
-            },
-            {
-                id: "guid4",
-                name: "Mitko",
-                pfp: "url",
-                about: "str",
-                experiance: "4 years"
-            }
-        ]
-    }
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['institution'],
+        queryFn: () => academyAPI.getInstitution(institutionId!)
+    })
+
+    console.log()
+
+    // const data = {
+    //     id: "guid1",
+    //     name: "Alo",
+    //     price: 10000,
+    //     photo: "url",
+    //     location: "Sofia blah blah blah",
+    //     instructors: [
+    //         {
+    //             id: "guid2",
+    //             name: "John Doe",
+    //             pfp: "url",
+    //             about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
+    //             experiance: "10 years"
+    //         },
+    //         {
+    //             id: "guid3",
+    //             name: "Jane Doe",
+    //             pfp: "url",
+    //             about: "str",
+    //             experiance: "3 years"
+    //         },
+    //         {
+    //             id: "guid4",
+    //             name: "Mitko",
+    //             pfp: "url",
+    //             about: "str",
+    //             experiance: "4 years"
+    //         }
+    //     ]
+    // }
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
@@ -70,6 +79,7 @@ export default function Insitution() {
             <div className="grid grid-cols-4 gap-4 m-5 justify-center items-center">
 
                 {
+                    !isLoading &&
                     data.instructors.map((instructor) => {
                         return (
                             <InstructorCard key={instructor.name} data={instructor} variant="clickable" size="normal" />

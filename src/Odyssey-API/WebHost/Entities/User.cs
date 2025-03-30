@@ -20,4 +20,9 @@ public class User : IdentityUser
     [MaxLength(50)]
     public string Experience { get; set; } = string.Empty;
     public bool? Deleted { get; set; }
+
+    [MaxLength(100)]
+    public string? AcademyId { get; set; } = Guid.NewGuid().ToString();
+    [ForeignKey("AcademyId")]
+    public Academy? Academy { get; set; }
 }

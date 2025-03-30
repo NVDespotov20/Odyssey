@@ -39,14 +39,6 @@ public class AcademyService : IAcademyService
         // Create a new academy
         public async Task<AcademyViewModel> CreateAcademyAsync(AcademyInputModel academy)
         {
-            Academy? existingAcademy = await _context.Academies
-                .FirstOrDefaultAsync(a => a.Id == academy.Id);
-
-            if (existingAcademy != null)
-            {
-                return new();
-            }
-
             var newAcademy = new Academy
             {
                 Id = Guid.NewGuid().ToString(), // Use GUID or other strategy for unique IDs
@@ -69,7 +61,7 @@ public class AcademyService : IAcademyService
         }
 
         // Update an existing academy
-        public async Task<AcademyViewModel> UpdateAcademyAsync(AcademyInputModel academy)
+        public async Task<AcademyViewModel> UpdateAcademyAsync(Academy academy)
         {
             Academy? existingAcademy = await _context.Academies
                 .FirstOrDefaultAsync(a => a.Id == academy.Id);

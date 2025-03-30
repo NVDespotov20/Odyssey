@@ -10,7 +10,7 @@ namespace WebHost.Controllers;
 /// Controller for managing academies
 /// </summary>
 [ApiController]
-[Authorize(Policy = "UserOnly")]
+// [Authorize(Policy = "UserOnly")]
 [Route("[controller]")]
 public class AcademiesController : ControllerBase
 {
@@ -26,6 +26,7 @@ public class AcademiesController : ControllerBase
     /// </summary>
     /// <returns>All academies</returns>
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAcademies()
     {
         try
@@ -45,6 +46,7 @@ public class AcademiesController : ControllerBase
     /// <param name="id">Academy id</param>
     /// <returns>Academy</returns>
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetAcademy(string id)
     {
         try
@@ -68,6 +70,7 @@ public class AcademiesController : ControllerBase
     /// <param name="academy">Academy data</param>
     /// <returns>Created academy</returns>
     [HttpPost]
+    [Authorize(Policy = "InstructorOnly")]
     public async Task<IActionResult> CreateAcademy(AcademyInputModel academy)
     {
         try
@@ -87,7 +90,7 @@ public class AcademiesController : ControllerBase
     /// <param name="academy">Academy data</param>
     /// <returns>Updated academy</returns>
     [HttpPut]
-    public async Task<IActionResult> UpdateAcademy(AcademyInputModel academy)
+    public async Task<IActionResult> UpdateAcademy(Academy academy)
     {
         try
         {

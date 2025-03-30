@@ -18,7 +18,7 @@ public class UserService : IUserService
         public async Task<UserViewModel?> GetUser(string userId)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.UserName == userId);
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {

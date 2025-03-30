@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebHost.Entities;
 using WebHost.Models;
 using WebHost.Services.Contracts;
 
@@ -11,10 +13,29 @@ namespace WebHost.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ICurrentUser _currentUser;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, ICurrentUser currentUser)
     {
         _userService = userService;
+        _currentUser = currentUser;
+    }
+
+    [HttpGet("current")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var user = await _userService.GetUser(_currentUser.UserId);
+        if(user == null)
+            return NotFound();
+        return new JsonResult(new
+        {
+            user.Username, 
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            _currentUser.Roles
+        });
+
     }
 
     [HttpGet("{userId}")]

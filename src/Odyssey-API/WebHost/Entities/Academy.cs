@@ -16,6 +16,9 @@ public class Academy
     
     [Required]
     public string PhotoUrl { get; set; }
+    
+    [Required]
+    public string About { get; set; }
 
     [Required]
     public decimal Price { get; set; }

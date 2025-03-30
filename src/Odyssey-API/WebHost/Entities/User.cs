@@ -23,6 +23,5 @@ public class User : IdentityUser
 
     [MaxLength(100)]
     public string? AcademyId { get; set; } = Guid.NewGuid().ToString();
-    [ForeignKey("AcademyId")]
     public Academy? Academy { get; set; }
 }

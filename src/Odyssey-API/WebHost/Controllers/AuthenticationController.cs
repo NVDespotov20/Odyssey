@@ -31,7 +31,19 @@ public class AuthenticationController : Controller
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterInputModel model)
     {
-        var user = new User { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+        var user = new User
+        {
+            UserName = model.Username,
+            Email = model.Email,
+            AccessFailedCount = 0,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            AboutMe = "",
+            Experience = "",
+            AcademyId = null,
+            Academy = null,
+
+        };
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded) return BadRequest(result.Errors);
 
@@ -77,7 +89,7 @@ public class AuthenticationController : Controller
         // Create claims, including role claims
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Id)
         };

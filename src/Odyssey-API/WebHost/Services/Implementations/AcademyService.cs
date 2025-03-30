@@ -118,7 +118,8 @@ public class AcademyService : IAcademyService
                     Id = a.Id,
                     Name = a.Name,
                     Price = a.Price,
-                    Location = a.Location
+                    Location = a.Location,
+                    PhotoUrl = a.PhotoUrl
                 })
                 .ToListAsync();
 

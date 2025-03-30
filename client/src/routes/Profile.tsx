@@ -42,7 +42,7 @@ export default function Profile() {
 
                 <div className="flex gap-5">
                     <Button onClick={() => { setIsDatePickerModalOpened(true) }} className="py-6 px-20">Show Calendar</Button>
-                    <Button onClick={() => { }} className="py-6 px-20">Edit</Button>
+                    <Button onClick={() => { }} className="py-6 px-20" variant="secondary">Edit</Button>
                 </div>
             </div>
             <div className="flex justify-center items-center">
@@ -67,6 +67,8 @@ export default function Profile() {
                                     selected={selectedDate}
                                     onSelect={setSelectedDate}
                                     className="justify-center border border-input/30 rounded-lg"
+                                    modifiersClassNames={{ marked: "bg-blue-400 text-white" }}
+                                    modifiers={{ marked: preSelectedDates }}
                                 />
                                 <div className="flex flex-col gap-1">
                                     {timeRanges.map((timeRange, index) => (

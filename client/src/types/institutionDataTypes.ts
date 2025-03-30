@@ -10,7 +10,7 @@ export type InstitutionDataType = {
     id: string,
     name: string;
     price: number,
-    photo: string,
+    photoUrl: string,
     location: string,
     instructors: InstructorDataType[]
 }

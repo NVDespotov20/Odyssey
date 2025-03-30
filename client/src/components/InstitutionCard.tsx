@@ -12,13 +12,13 @@ export default function InstitutionCard({ data, id }: { data: InstitutionDataTyp
                 <CardContent className="flex p-4 h-full flex-col gap-5">
                     <div className="absolute top-0 left-0 w-full h-full">
                         <img
-                            src="random.jpg"
+                            src={data.photoUrl}
                             className="h-1/2 w-full object-cover rounded-t-xl"
                         />
                     </div>
 
                     <div className="flex absolute bottom-3 flex-col gap-2">
-                        <h1 className="text-3xl font-bold">Alo</h1>
+                        <h1 className="text-3xl font-bold">{data.name}</h1>
                         <div className="flex gap-2 items-center text-xl">
                             <MapPin />
                             <span>{data.location}</span>

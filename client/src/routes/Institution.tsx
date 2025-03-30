@@ -3,8 +3,8 @@ import { MapPin } from "lucide-react"
 import Nav from "@/components/Nav"
 
 import InstructorCard from "@/components/InstructorCard"
-import {useQuery} from "@tanstack/react-query";
-import {academyAPI} from "@/apis/academyAPI.ts";
+import { useQuery } from "@tanstack/react-query";
+import { academyAPI } from "@/apis/academyAPI.ts";
 
 export default function Insitution() {
     const [searchParams] = useSearchParams()
@@ -15,55 +15,26 @@ export default function Insitution() {
         queryFn: () => academyAPI.getInstitution(institutionId!)
     })
 
-    console.log()
-
-    // const data = {
-    //     id: "guid1",
-    //     name: "Alo",
-    //     price: 10000,
-    //     photo: "url",
-    //     location: "Sofia blah blah blah",
-    //     instructors: [
-    //         {
-    //             id: "guid2",
-    //             name: "John Doe",
-    //             pfp: "url",
-    //             about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
-    //             experiance: "10 years"
-    //         },
-    //         {
-    //             id: "guid3",
-    //             name: "Jane Doe",
-    //             pfp: "url",
-    //             about: "str",
-    //             experiance: "3 years"
-    //         },
-    //         {
-    //             id: "guid4",
-    //             name: "Mitko",
-    //             pfp: "url",
-    //             about: "str",
-    //             experiance: "4 years"
-    //         }
-    //     ]
-    // }
+    if (isLoading) {
+        return
+    }
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
             <Nav isSeachVisible={false} />
-            <img className="h-[35vh] m-3 rounded-sm bg-center object-cover" src="/public/random.jpg" />
+            <img className="h-[35vh] m-3 rounded-sm bg-center bg-cover" src={data.photoUrl} />
 
             <div className="m-3 flex flex-col gap-3">
-                <h1 className="text-3xl">This is really cool name here</h1>
+                <h1 className="text-3xl">{data.name}</h1>
 
                 <div className="flex gap-3">
                     <MapPin />
-                    <p className="text-2xl">Location</p>
+                    <p className="text-2xl">{data.location}</p>
                 </div>
 
                 <div className="flex gap-3">
                     <p className="text-2xl">BGN</p>
-                    <p className="text-2xl">1000</p>
+                    <p className="text-2xl">{data.price}</p>
                 </div>
 
                 <div className="flex w-full justify-center  my-10">
@@ -79,7 +50,7 @@ export default function Insitution() {
             <div className="grid grid-cols-4 gap-4 m-5 justify-center items-center">
 
                 {
-                    !isLoading &&
+                    !isLoading && data.instructors &&
                     data.instructors.map((instructor) => {
                         return (
                             <InstructorCard key={instructor.name} data={instructor} variant="clickable" size="normal" />

@@ -29,6 +29,14 @@ public class AppointmentController : Controller
         return Ok(appointments);
     }
 
+    [HttpGet("getDay")]
+    [Authorize]
+    public async Task<IActionResult> GetAppoinmentsForInstructorForDay(string userId, DateTime date)
+    {
+        var appointments = await _appointmentService.GetUserAppointmentsForDayAsync(userId, date);
+        return Ok(appointments.Select(a => new { a.StartTime, a.EndTime }).ToList());
+    }
+
     [HttpGet("getById")]
     [Authorize]
     public async Task<IActionResult> GetAppointmentByIdAsync(string appointmentId)

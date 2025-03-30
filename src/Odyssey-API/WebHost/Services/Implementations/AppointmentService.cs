@@ -78,6 +78,14 @@ public class AppointmentService : IAppointmentService
     {
         return await context.Appointments.Where(a => a.StudentId == userId).ToListAsync();  
     }
+    public async Task<IEnumerable<Appointment>> GetUserAppointmentsForDayAsync(string userId, DateTime date)
+    {
+        return await context.Appointments.Where(a =>
+                a.InstructorId == userId &&
+                a.StartTime.DayOfYear == date.DayOfYear &&
+                a.EndTime.DayOfYear == date.DayOfYear)
+            .ToListAsync();  
+    }
 
     public async Task<IEnumerable<Appointment>> GetUserInstructorAppointmentsAsync(string userId, string instructorId)
     {

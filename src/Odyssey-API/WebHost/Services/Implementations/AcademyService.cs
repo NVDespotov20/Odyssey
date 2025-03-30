@@ -113,13 +113,23 @@ public class AcademyService : IAcademyService
         public async Task<IEnumerable<AcademyViewModel>> GetAcademiesAsync()
         {
             var academies = await _context.Academies
+                .Include(a => a.Users)
                 .Select(a => new AcademyViewModel
                 {
                     Id = a.Id,
                     Name = a.Name,
                     Price = a.Price,
                     Location = a.Location,
-                    PhotoUrl = a.PhotoUrl
+                    PhotoUrl = a.PhotoUrl,
+                    Instructors = a.Users.Select(u => new UserViewModel
+                    {
+                        Id = u.Id,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        AboutMe = u.AboutMe ?? string.Empty,
+                        Email = u.Email ?? string.Empty,
+                        Username = u.UserName ?? string.Empty,
+                    }).ToList()
                 })
                 .ToListAsync();
 

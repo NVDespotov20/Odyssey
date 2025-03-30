@@ -12,6 +12,7 @@ import SignUp from './routes/SignUp'
 import SignIn from './routes/SignIn'
 import Browse from './routes/Browse'
 import Institution from './routes/Institution'
+import Instructor from './routes/Instructor'
 
 function App() {
     const BrowserRouter = createBrowserRouter([
@@ -19,7 +20,8 @@ function App() {
         { path: '/signup', element: <SignUp /> },
         { path: '/login', element: <SignIn /> },
         { path: '/browse', element: <Protected><Browse /> </Protected> },
-        { path: '/institution', element: <Protected><Institution /></Protected> }
+        { path: '/institution', element: <Protected><Institution /></Protected> },
+        { path: '/instructor', element: <Protected><Instructor /></Protected> }
     ])
 
     return (

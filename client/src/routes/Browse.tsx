@@ -15,18 +15,21 @@ export default function Browse() {
                 location: "Sofia blah blah blah",
                 instructors: [
                     {
+                        id: "guid1",
                         name: "John Doe",
                         pfp: "url",
                         about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
                         experiance: "10 years"
                     },
                     {
+                        id: "guid2",
                         name: "Jane Doe",
                         pfp: "url",
                         about: "str",
                         experiance: "3 years"
                     },
                     {
+                        id: "guid3",
                         name: "Mitko",
                         pfp: "url",
                         about: "str",

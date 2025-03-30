@@ -1,10 +1,13 @@
 import { Card, CardContent } from "./ui/card"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import { InstructorDataType } from "@/types/institutionDataTypes"
+import { useNavigate } from "react-router-dom";
 
 export default function InstructorCard({ data, variant, size }: { data: InstructorDataType, variant: "clickable" | "noneclickable", size: "small" | "normal" }) {
+    const navigate = useNavigate();
+
     return (
-        <div className={`h-full ${variant == 'clickable' ? "cursor-pointer" : ""}`}>
+        <div onClick={() => variant == 'clickable' && navigate(`/instructor?Id=${data.id}`)} className={`h-full ${variant == 'clickable' ? "cursor-pointer" : ""}`}>
             <Card className="h-full relative">
                 <CardContent className="flex p-4 min-h-full flex-col gap-5 items-center">
                     <Avatar className="w-48 h-48">

@@ -2,7 +2,6 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { MapPin } from "lucide-react"
 import Nav from "@/components/Nav"
 
-import Instructor from "@/components/InstructorCard"
 import InstructorCard from "@/components/InstructorCard"
 
 export default function Insitution() {
@@ -17,18 +16,21 @@ export default function Insitution() {
         location: "Sofia blah blah blah",
         instructors: [
             {
+                id: "guid2",
                 name: "John Doe",
                 pfp: "url",
                 about: "You there. Ogre. -I. By the order of lord Farquaad. I am authorized to place you both underarrest. And transport you to designated resettlement facility. Oh really? You and what army? Can Isay something to you?",
                 experiance: "10 years"
             },
             {
+                id: "guid3",
                 name: "Jane Doe",
                 pfp: "url",
                 about: "str",
                 experiance: "3 years"
             },
             {
+                id: "guid4",
                 name: "Mitko",
                 pfp: "url",
                 about: "str",
@@ -39,7 +41,7 @@ export default function Insitution() {
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#f5f5f5]">
-            <Nav />
+            <Nav isSeachVisible={false} />
             <img className="h-[35vh] m-3 rounded-sm bg-center object-cover" src="/public/random.jpg" />
 
             <div className="m-3 flex flex-col gap-3">

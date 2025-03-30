@@ -1,4 +1,5 @@
 export type InstructorDataType = {
+    id: string,
     name: string,
     pfp: string,
     about: string,
